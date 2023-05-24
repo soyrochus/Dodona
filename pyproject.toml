@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "dodona"
 version = "0.1.0"
-description = "Simple GUI for the OpenAI API"
+description = "Simple GUI for the OpenAI API, made with OpenAI"
 authors = ["Iwan van der Kleijn <iwanvanderkleijn@gmail.com>"]
 license = "MIT"
 readme = "README.md"

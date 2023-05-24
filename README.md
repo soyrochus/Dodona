@@ -1,8 +1,8 @@
 # Dodona
 
- Simple GUI for the OpenAI API
+ Simple GUI for the OpenAI API, made with OpenAI
 
-The script can be used as an example on how to access the OpenAI API with Python.
+The script can be used as an example on how to access the OpenAI API with Python. For the most part created with OpenAI: ChatGPT, Copilot and direct calls to the OpenAI API (through Dodona) as well.
 
 ## Installation
 
