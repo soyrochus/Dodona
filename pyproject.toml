@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "dodona"
+version = "0.1.0"
+description = "Simple GUI for the OpenAI API"
+authors = ["Iwan van der Kleijn <iwanvanderkleijn@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pillow = "^9.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
