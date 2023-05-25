@@ -162,3 +162,6 @@ cython_debug/
 .idea/
 
 out/
+keys/
+images/
+dev.env
