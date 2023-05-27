@@ -4,6 +4,7 @@
 
 The script can be used as an example on how to access the OpenAI API with Python. For the most part created with OpenAI: ChatGPT, Copilot and direct calls to the OpenAI API (through Dodona) as well.
 
+![Screenshot Dodona with VSCode](Screenshot.png)
 ## Installation
 
 Clone the repository. Use the dependency and package manager [Poetry](https://python-poetry.org/) to install all the dependencies of vein.
