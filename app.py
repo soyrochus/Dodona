@@ -8,7 +8,7 @@ from tkinter import filedialog
 import os
 from PIL import Image, ImageTk
 
-from openapi import get_dalle_image, get_whisper_transcription
+from openapi import get_dalle_image, get_whisper_transcription, get_whisper_translation
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -54,10 +54,24 @@ class Application(tk.Frame):
 
         self.file_path_label = tk.StringVar()
         self.label = ttk.Label(self.tab2, textvariable=self.file_path_label)
-        self.label.grid(row=1, column=0, columnspan=2)
+        self.label.grid(row=1, column=0, columnspan=1)
+        
+        # Create a variable to store the selected radio button
+        self.radio_var = tk.StringVar()
+
+        # Create the first radio button
+        self.transcribe_radio = ttk.Radiobutton(self.tab2, text="Transcribe", variable=self.radio_var, value="Transcribe")
+        self.transcribe_radio.grid(row=1, column=1, pady=5, padx=5)
+
+        # Create the second radio button
+        self.translate_radio = ttk.Radiobutton(self.tab2, text="Translate", variable=self.radio_var, value="Translate")
+        self.translate_radio.grid(row=1, column=2, pady=5, padx=5)
+
+        # Set default value
+        self.radio_var.set("Transcribe")
 
         self.transcription_field = scrolledtext.ScrolledText(self.tab2, wrap=tk.WORD, width=30, height=10, bg="#ffffff")
-        self.transcription_field.grid(row=2, column=0, columnspan=2, pady=5, padx=5, sticky="nsew")
+        self.transcription_field.grid(row=2, column=0, columnspan=3, pady=5, padx=5, sticky="nsew")
 
         # Configure columns and rows for expanding
         self.tab1.columnconfigure(0, weight=1)
@@ -83,9 +97,20 @@ class Application(tk.Frame):
 
     def send_sound_to_text(self):
         
-        text = get_whisper_transcription(self.file_path_label.get())
+        # Get the file path
+        file_path = self.file_path_label.get()
+        # Check the value of the radio button
+        if self.radio_var.get() == "Transcribe":
+        # Transcribe the file
+            result = get_whisper_transcription(file_path)
+        elif self.radio_var.get() == "Translate":
+            # Translate the file
+            result = get_whisper_translation(file_path)
+        else:
+            print("Unexpected radio button selection")
+    
         self.transcription_field.delete('1.0', tk.END)
-        self.transcription_field.insert(tk.END, text)
+        self.transcription_field.insert(tk.END, result)
 
     
     def send_dall_e(self):

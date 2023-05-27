@@ -23,27 +23,25 @@ transcript_dir = os.path.join(os.curdir, transcription_dir_name)
 if not os.path.isdir(transcript_dir):
     os.mkdir(transcript_dir)
 
+def get_whisper_translation(sound_path):
+    #call openapi whisper api 
+    
+    audio_file= open(sound_path, "rb")
+    translation = openai.Audio.translate("whisper-1", audio_file)
+    #translation is a json object, get the text from it
+    translation = translation["text"]
+    store_data(transcript_dir, "translation", "txt", False, translation)  
+    return translation
+
 
 def get_whisper_transcription(sound_path):
     #call openapi whisper api 
     
     audio_file= open(sound_path, "rb")
     transcript = openai.Audio.transcribe("whisper-1", audio_file)
-    #save transcript with unique name to transcript_dir
-    # Get the current date and time
-    now = datetime.datetime.now()
-    # Format the date and time as a string
-    timestamp = now.strftime("%Y%m%d_%H%M%S")
-    # Append the timestamp to the filename
-    filename = f"transcription_{timestamp}.json"
-    #write transcript to file
-    transcript_filepath = os.path.join(transcript_dir, filename)
-    #transcript is a json object, get the text from it
     transcript = transcript["text"]
-    with open(transcript_filepath, "w") as transcript_file: 
-        transcript_file.write(transcript)   
+    store_data(transcript_dir, "transcript", "txt", False, transcript)
     return transcript
-    
 
 def get_dalle_image(prompt):
     
@@ -56,20 +54,23 @@ def get_dalle_image(prompt):
     # print response
     print(generation_response)
     # save the image
-    # Get the current date and time
-    now = datetime.datetime.now()
+    
+    image_url = generation_response["data"][0]["url"]  # extract image URL from response
+    image = requests.get(image_url).content 
+    return store_data(image_dir, "dalle_image", "png", True, image)
 
+
+def store_data(data_dir, file_name, file_ext, binary, data):
+
+    now = datetime.datetime.now()
     # Format the date and time as a string
     timestamp = now.strftime("%Y%m%d_%H%M%S")
-
     # Append the timestamp to the filename
-    filename = f"dalle_image_{timestamp}.png"
-
-    image_filepath = os.path.join(image_dir, filename)
-    image_url = generation_response["data"][0]["url"]  # extract image URL from response
-    image = requests.get(image_url).content  # download the image
-
-    with open(image_filepath, "wb") as image_file:
-        image_file.write(image)  # write the image to the file
+    filename = f"{file_name}_{timestamp}.{file_ext}"
+    #write data to file
+    filepath = os.path.join(data_dir, filename)
+  
+    with open(filepath, f"w{'b' if binary else ''}") as data_file: 
+        data_file.write(data)
     
-    return image_filepath
+    return filepath
