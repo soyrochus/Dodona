@@ -8,7 +8,7 @@ from tkinter import filedialog
 import os
 from PIL import Image, ImageTk
 
-from openapi import get_dalle_image
+from openapi import get_dalle_image, get_whisper_transcription
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -49,14 +49,15 @@ class Application(tk.Frame):
         self.select_file_button = ttk.Button(self.tab2, text="Select sound file", command=self.open_file_dialog)
         self.select_file_button.grid(row=0, column=0, pady=5, padx=5)
 
-        self.send_button2 = ttk.Button(self.tab2, text="Send", command=self.empty_function)
+        self.send_button2 = ttk.Button(self.tab2, text="Send", command=self.send_sound_to_text)
         self.send_button2.grid(row=0, column=1, pady=5, padx=5)
 
-        self.label = ttk.Label(self.tab2, text="Label text goes here")
+        self.file_path_label = tk.StringVar()
+        self.label = ttk.Label(self.tab2, textvariable=self.file_path_label)
         self.label.grid(row=1, column=0, columnspan=2)
 
-        self.text_field = scrolledtext.ScrolledText(self.tab2, wrap=tk.WORD, width=30, height=10, bg="#ffffff")
-        self.text_field.grid(row=2, column=0, columnspan=2, pady=5, padx=5, sticky="nsew")
+        self.transcription_field = scrolledtext.ScrolledText(self.tab2, wrap=tk.WORD, width=30, height=10, bg="#ffffff")
+        self.transcription_field.grid(row=2, column=0, columnspan=2, pady=5, padx=5, sticky="nsew")
 
         # Configure columns and rows for expanding
         self.tab1.columnconfigure(0, weight=1)
@@ -76,11 +77,16 @@ class Application(tk.Frame):
 
     def open_file_dialog(self):
         file_path = filedialog.askopenfilename()
+        self.file_path_label.set(file_path)
         print(f"Selected file: {file_path}")  # print the selected file path
 
 
-    def empty_function(self):
-        print("Button pressed. Function not yet implemented.")
+    def send_sound_to_text(self):
+        
+        text = get_whisper_transcription(self.file_path_label.get())
+        self.transcription_field.delete('1.0', tk.END)
+        self.transcription_field.insert(tk.END, text)
+
     
     def send_dall_e(self):
         # Load an image file

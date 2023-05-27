@@ -165,3 +165,6 @@ out/
 keys/
 images/
 dev.env
+sound/
+transcriptions/
+```

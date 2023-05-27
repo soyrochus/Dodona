@@ -12,6 +12,34 @@ Clone the repository. Use the dependency and package manager [Poetry](https://py
 poetry install
 ```
 
+## Configuration for usage with OpenAI
+
+Create a text file _"dev.env"_ in the root of the project. This will contain the "OPENAI_API_KEY" environment variable used by the application to obtain the token associated to a valid OpenAI account when calling the API.
+
+```bash
+OPENAI_API_KEY=sk-A_seCR_et_key_GENERATED_foryou_by_OPENAI
+```
+
+The environment variable is loaded into the execution context of the application when run in the debugger if as such specified in the file _"launch.json"_. An example launch configuration shows how:
+
+```json
+{   //example launch configuration
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "app.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/dev.env"
+        }
+    ]
+}
+```
+
+
 ## Usage
 [Activate the Python virtual environment](https://python-poetry.org/docs/basic-usage/#activating-the-virtual-environment) with
 
