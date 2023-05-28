@@ -4,24 +4,15 @@ import openai
 import requests
 import os
 import datetime
+from utils import realize_current_subdir
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 # set a directory to save DALL·E images to
-image_dir_name = "images"
-image_dir = os.path.join(os.curdir, image_dir_name)
-
-# create the directory if it doesn't yet exist
-if not os.path.isdir(image_dir):
-    os.mkdir(image_dir)
+image_dir = realize_current_subdir("images")
 
 # set a directory to save whisper transcriptions to
-transcription_dir_name = "transcriptions"
-transcript_dir = os.path.join(os.curdir, transcription_dir_name)
-
-# create the directory if it doesn't yet exist
-if not os.path.isdir(transcript_dir):
-    os.mkdir(transcript_dir)
+transcript_dir = realize_current_subdir("transcriptions")
 
 def get_whisper_translation(sound_path):
     #call openapi whisper api 
