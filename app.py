@@ -8,7 +8,7 @@ from tkinter import filedialog
 import os
 from PIL import Image, ImageTk
 
-from openapi import get_dalle_image, get_whisper_transcription, get_whisper_translation
+from openapi import get_dalle_image, get_whisper_transcription, get_whisper_translation, get_chat_response
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -26,6 +26,19 @@ class Application(tk.Frame):
 
         self.tabControl = ttk.Notebook(self)  # Create Tab Control
 
+        # Creating the Chat tab
+        self.tab0 = ttk.Frame(self.tabControl)
+        self.tabControl.add(self.tab0, text='Chat')
+        # Creating widgets for the Chat tab
+        self.chat_prompt = tk.Text(self.tab0, height=3)
+        self.chat_prompt.grid(row=0, column=0, pady=5, padx=5, sticky="ew")
+        
+        self.send_button0 = ttk.Button(self.tab0, text="Send", command=self.send_chat)
+        self.send_button0.grid(row=1, column=0, pady=5, padx=5)
+        
+        self.chat = scrolledtext.ScrolledText(self.tab0)
+        self.chat.grid(row=2, column=0, pady=5, padx=5, sticky="nsew")
+        
         # Creating the Dall-e tab
         self.tab1 = ttk.Frame(self.tabControl)
         self.tabControl.add(self.tab1, text='Dall-e')
@@ -74,6 +87,8 @@ class Application(tk.Frame):
         self.transcription_field.grid(row=2, column=0, columnspan=3, pady=5, padx=5, sticky="nsew")
 
         # Configure columns and rows for expanding
+        self.tab0.columnconfigure(0, weight=1)
+        self.tab0.rowconfigure(2, weight=1)
         self.tab1.columnconfigure(0, weight=1)
         self.tab1.rowconfigure(2, weight=1)
         self.tab2.columnconfigure(0, weight=1)
@@ -112,6 +127,12 @@ class Application(tk.Frame):
         self.transcription_field.delete('1.0', tk.END)
         self.transcription_field.insert(tk.END, result)
 
+    def send_chat(self):
+        #send text input to openai 
+        prompt_text = self.chat_prompt.get("1.0", tk.END)
+        response = get_chat_response(prompt_text)
+        #show response in chat window
+        self.chat.insert(tk.END, response +  "\n---------------------------------\n")
     
     def send_dall_e(self):
         # Load an image file
