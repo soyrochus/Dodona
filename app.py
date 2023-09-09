@@ -10,6 +10,7 @@ from PIL import Image, ImageTk
 
 from openapi import get_dalle_image, get_whisper_transcription, get_whisper_translation, get_chat_response
 
+
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
